@@ -188,7 +188,10 @@ function countInsertions {
 
 
                 if [[ "$userSummaryCounter" -gt "0" ]]; then
-                    echo "$user $userFiltredCounter $userSummaryCounter"
+
+                    # RESUME BY USER IN A FLOW STATE
+                    echo "$(tput setaf 6)$user $userFiltredCounter $userSummaryCounter$(tput sgr0)"
+                    echo -e "\n\n\n\n"
 
                     # COLORING FINAL COUNTER
                     lineUndecidedHeader="undecided"
