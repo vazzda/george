@@ -137,9 +137,15 @@ function countInsertions {
                                     echo "more than $sizeLimit:" $brHash $author $date "("$sum")"
                                     echo ${gitMessages[$commitI]}
                                     if [[ $opt_pauseOnGrayCommit == 'true' ]]; then
-                                        echo "https://gitlab.com/digitarium/$folder/-/commit/$brHash"
-
-                                        echo "on hold"
+                                        echo -e "\n\n\n\n"
+                                        echo "$(tput setaf 6)DETAILS: ==================================================================$(tput sgr0)"
+                                        echo -e "\n"
+                                        echo "counter        : $sum"
+                                        echo "author         : $author"
+                                        echo "date           : $date"
+                                        echo "commit message : ${gitMessages[$commitI]}"
+                                        echo "link           : $(tput setaf 3)https://gitlab.com/digitarium/$folder/-/commit/$brHash$(tput sgr0)"
+                                        echo -e "\n\n$(tput setaf 6)ON HOLD$(tput sgr0)"
 
                                         read -r -n 1 -p "Is it trusted? [y/n/any key for skipping] " response
                                         case $response in
