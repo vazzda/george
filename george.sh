@@ -183,7 +183,41 @@ function countInsertions {
 
                 if [[ "$userSummaryCounter" -gt "0" ]]; then
                     echo "$user $userFiltredCounter $userSummaryCounter"
-                    usersWithCounts[$userI]="$user, undecided: $userUndecidedCounter, trusted: $userFiltredCounter, untrusted: $userUntrustedCounter, notUniq: $userNotUniqCounter, sum: $userSummaryCounter, $folder"
+
+                    # COLORING FINAL COUNTER
+                    lineUndecidedHeader="undecided"
+                    lineTrustedHeader="trusted"
+                    lineUntrustedHeader="untrusted"
+                    lineNotUniqHeader="not uniq"
+                    lineSumHeader="summary"
+                    if [[ "$userUndecidedCounter" -gt "0" ]]; then
+                      lineUndecided="$(tput setaf 1)$userUndecidedCounter$(tput sgr0)"
+                    else
+                      lineUndecided="$(tput setaf 2)$userUndecidedCounter$(tput sgr0)"
+                    fi
+                    if [[ "$userFiltredCounter" -gt "0" ]]; then
+                      lineTrusted="$(tput setaf 2)$userFiltredCounter$(tput sgr0)"
+                    else
+                      lineTrusted="$(tput setaf 1)$userFiltredCounter$(tput sgr0)"
+                    fi
+                    if [[ "$userUntrustedCounter" -gt "0" ]]; then
+                      lineUntrusted="$(tput setaf 3)$userUntrustedCounter$(tput sgr0)"
+                    else
+                      lineUntrusted="$userUntrustedCounter"
+                    fi
+                    if [[ "$userNotUniqCounter" -gt "0" ]]; then
+                      lineNotUniq="$(tput setaf 5)$userNotUniqCounter$(tput sgr0)"
+                    else
+                      lineNotUniq="$userNotUniqCounter"
+                    fi
+                    lineSum="$userSummaryCounter"
+                    lineFolder="$(tput setaf 6)$folder$(tput sgr0)"
+
+                    finalColoredLine="$user $lineFolder
+                    \n$lineTrustedHeader: $lineTrusted, $lineUndecidedHeader: $lineUndecided
+                    \n$lineSumHeader: $lineSum, $lineUntrustedHeader: $lineUntrusted, $lineNotUniqHeader: $lineNotUniq\n"
+
+                    usersWithCounts[$userI]="$finalColoredLine"
                 fi
 
                 let "userI= $userI + 1"
@@ -193,15 +227,14 @@ function countInsertions {
         fi
     done
 
+    echo -e "\n\n\n\n\n\n\n"
+    echo "$(tput setaf 6)================ FINAL COUNTER ================$(tput sgr0)"
     echo ""
-    echo ""
-    echo ""
-    echo "$(tput setaf 4)Strings counter$(tput sgr0)"
     for k in "${!usersWithCounts[@]}"
     do
-        echo  ${usersWithCounts["$k"]}
-    done |
-    sort -rn -k1
+        echo -e  ${usersWithCounts["$k"]}
+    done
+    echo "$(tput setaf 6)===============================================$(tput sgr0)"
 }
 
 
@@ -277,7 +310,7 @@ function printData() {
     echo ""
     echo ""
     echo ""
-    echo "$(tput setaf 4)Big commits $(tput sgr0)"
+    echo "$(tput setaf 6)Big commits $(tput sgr0)"
     countInsertions committers[@]
     echo ""
     echo ""
