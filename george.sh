@@ -1,12 +1,29 @@
 #!/bin/bash
 
-#check if date or gdate is installed and use it
-if [ -x "$(command -v date)" ]; then
+
+#date doesn't work on Macs as it should (no --date option)
+#so George checks if its mac and it has gdate as a replacement
+unameOut="$(uname -s)"
+case "${unameOut}" in
+    Linux*)     machine=Linux;;
+    Darwin*)    machine=Mac;;
+    CYGWIN*)    machine=Cygwin;;
+    MINGW*)     machine=MinGw;;
+    *)          machine="UNKNOWN:${unameOut}"
+esac
+
+if [[ $machine == "Linux" ]]; then
     date_exec="date"
 elif [ -x "$(command -v gdate)" ]; then
     date_exec="gdate"
-else
-    echo "gdate (mac) or date (linux) should be presented for this script to work"
+elif [[ $machine == "Mac" ]]; then
+    echo "Seems like u're on Mac. Please install gdate."
+    echo "Cause date here doesn't work as we hope it should."
+    echo "$(tput setaf 1)Please install gdate.$(tput sgr0)"
+    echo "Thank you."
+    exit 1
+  else
+    echo "Smth went wrong. Ask Vazzda about it."
     exit 1
 fi
 
