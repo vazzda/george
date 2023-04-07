@@ -302,7 +302,10 @@ function countByFakeDate {
 
 function commitIsTrusted() {
     hash="${@:1}"
-    readarray TRUSTED_COMMITS < ../george/commits_trusted.list
+
+    while IFS=\= read TRUSTED_COMMIT; do
+        TRUSTED_COMMITS+=($TRUSTED_COMMIT)
+    done < ../george/commits_trusted.list
     trustedCommits=(${TRUSTED_COMMITS[@]})
 
     echo $(containsElement $hash ${trustedCommits[@]})
@@ -311,7 +314,9 @@ function commitIsTrusted() {
 
 function commitIsUnTrusted() {
     hash="${@:1}"
-    readarray UNTRUSTED_COMMITS < ../george/commits_untrusted.list
+    while IFS=\= read UNTRUSTED_COMMIT; do
+        UNTRUSTED_COMMITS+=($UNTRUSTED_COMMIT)
+    done < ../george/commits_untrusted.list
     untrustedCommits=(${UNTRUSTED_COMMITS[@]})
 
     echo $(containsElement $hash ${untrustedCommits[@]})
@@ -344,6 +349,9 @@ function printData() {
     echo ""
 }
 
-
-readarray FILE_USERS < users.list
+while IFS=\= read FILE_USER; do
+    #shielding users for usage in git log params
+    name=$(echo "$FILE_USER"  | sed 's/|/\\|/g; s/(/\\(/g; s/)/\\)/g')
+    FILE_USERS+=($name)
+done < users.list
 printData FILE_USERS[@] 'Front'
