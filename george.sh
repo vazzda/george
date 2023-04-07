@@ -73,7 +73,7 @@ function countInsertions {
 
             for user in "${users[@]}"
             do
-                gitResponse=$(git log --reverse --shortstat --pretty=format:"%H %ae:::" --all --no-merges --ignore-space-at-eol -w --since="$opt_since" --until="$opt_until" --author="$user" --diff-filter=AM | sed ':a;N;$!ba;s/:::\n/ /g' | awk ' {print $6 + $8} ')
+                gitResponse=$(git log --reverse --shortstat --pretty=format:"%H %ae:::" --all --no-merges --ignore-space-at-eol -w --since="$opt_since" --until="$opt_until" --author="$user" --diff-filter=AM | sed -e ':a' -e 'N' -e '$!ba' -e 's/:::\n/ /g' | awk ' {print $6 + $8} ')
                 userSummaryCounter=0
                 for count in $gitResponse
                 do
@@ -82,7 +82,7 @@ function countInsertions {
 
 
                 userDescNSum=()
-                gitAuthorsBase=$(git log --reverse --shortstat --pretty=format:"%H %ad %ae:::" --all --no-merges --ignore-space-at-eol -w --since="$sinceMinusBase" --until="$opt_since" --author="$user" --date="short" --diff-filter=AM | grep "\w" | sed ':a;N;$!ba;s/:::\n/ /g' | awk ' {print $1 "_" $2 "_" $3 "_" $7 + $9} ')
+                gitAuthorsBase=$(git log --reverse --shortstat --pretty=format:"%H %ad %ae:::" --all --no-merges --ignore-space-at-eol -w --since="$sinceMinusBase" --until="$opt_since" --author="$user" --date="short" --diff-filter=AM | grep "\w" | sed -e ':a' -e 'N' -e '$!ba' -e 's/:::\n/ /g' | awk ' {print $1 "_" $2 "_" $3 "_" $7 + $9} ')
                 gitMessagesBase=($(git log --reverse --pretty=format:"%s" --all --no-merges --ignore-space-at-eol -w --since="$sinceMinusBase" --until="$opt_since" --author="$user" --date="short" --diff-filter=AM | sed 's/ /_/g' | awk ' {print $1} '))
                 commitIBase=0
                 for count in $gitAuthorsBase
@@ -101,7 +101,7 @@ function countInsertions {
                 done
 
 
-                gitAuthors=$(git log --reverse --shortstat --pretty=format:"%H %ad %ae:::" --all --no-merges --ignore-space-at-eol -w --since="$opt_since" --until="$opt_until" --author="$user" --date="short" --diff-filter=AM | grep "\w" | sed ':a;N;$!ba;s/:::\n/ /g' | awk ' {print $1 "_" $2 "_" $3 "_" $7 + $9} ')
+                gitAuthors=$(git log --reverse --shortstat --pretty=format:"%H %ad %ae:::" --all --no-merges --ignore-space-at-eol -w --since="$opt_since" --until="$opt_until" --author="$user" --date="short" --diff-filter=AM | grep "\w" | sed -e ':a' -e 'N' -e '$!ba' -e 's/:::\n/ /g' | awk ' {print $1 "_" $2 "_" $3 "_" $7 + $9} ')
                 gitMessages=($(git log --reverse --pretty=format:"%s" --all --no-merges --ignore-space-at-eol -w --since="$opt_since" --until="$opt_until" --author="$user" --date="short" --diff-filter=AM | sed 's/ /_/g' | awk ' {print $1} '))
                 userFiltredCounter=0
                 userTrusedCounter=0
