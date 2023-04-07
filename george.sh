@@ -1,26 +1,41 @@
 #!/bin/bash
 
+
+#check if date or gdate is installed and use it
+if [ -x "$(command -v date)" ]; then
+    echo "date is presented"
+    date_exec="date"
+elif [ -x "$(command -v gdate)" ]; then
+    echo "gdate is presented"
+    date_exec="gdate"
+else
+    echo "gdate (mac) or date (linux) should be presented for this script to work"
+    exit 1
+fi
+
+
 opt_showUsersFront='false'
 opt_showUsersPhp='false'
 opt_showUsersJava='false'
 opt_showUsersHistory='false'
-opt_since=$(date --date="1 day ago" +%F)
-opt_until=$(date --date="today" +%F)
+opt_since=$($date_exec --date="1 day ago" +%F)
+opt_until=$($date_exec --date="today" +%F)
 opt_verbose='false'
+
 
 while getopts 'aps:u:v' flag; do
     case "${flag}" in
         a) opt_update='true' ;;
         p) opt_pauseOnGrayCommit='true' ;;
-        s) opt_since="$(date --date="$OPTARG" +%F)" ;;
-        u) opt_until="$(date --date="$OPTARG" +%F)" ;;
+        s) opt_since="$($date_exec --date="$OPTARG" +%F)" ;;
+        u) opt_until="$($date_exec --date="$OPTARG" +%F)" ;;
         v) opt_verbose='true' ;;
         *) error "Unexpected option ${flag}" ;;
     esac
 done
 
-sinceNumber=$(date --date="$opt_since" +%F | sed "s/-//g")
-sinceMinusBase=$(date -d "$(date -d "$opt_since" +%F)- 3 month" +%F)
+sinceNumber=$($date_exec --date="$opt_since" +%F | sed "s/-//g")
+sinceMinusBase=$($date_exec -d "$($date_exec -d "$opt_since" +%F)- 3 month" +%F)
 
 
 
@@ -75,7 +90,7 @@ function countInsertions {
                     data=(${count//_/ })
                     brHash=${data["0"]}
                     date=${data["1"]}
-                    dateNumber=$(date --date="$date" +%F | sed "s/-//g")
+                    dateNumber=$($date_exec --date="$date" +%F | sed "s/-//g")
                     author=${data["2"]}
                     sum=${data["3"]}
                     desc=${gitMessagesBase[$commitIBase]}
@@ -99,7 +114,7 @@ function countInsertions {
                     data=(${count//_/ })
                     brHash=${data["0"]}
                     date=${data["1"]}
-                    dateNumber=$(date --date="$date" +%F | sed "s/-//g")
+                    dateNumber=$($date_exec --date="$date" +%F | sed "s/-//g")
                     author=${data["2"]}
                     sum=${data["3"]}
                     desc=${gitMessages[$commitI]}
