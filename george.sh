@@ -238,6 +238,7 @@ function countInsertions {
 
     echo -e "\n\n\n\n\n\n\n"
     echo "$(tput setaf 6)================ FINAL COUNTER ================$(tput sgr0)"
+    echo "$(tput setaf 6)from $opt_since to $opt_until$(tput sgr0)"
     echo ""
     for k in "${!usersWithCounts[@]}"
     do
