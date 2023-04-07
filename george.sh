@@ -1,12 +1,9 @@
 #!/bin/bash
 
-
 #check if date or gdate is installed and use it
 if [ -x "$(command -v date)" ]; then
-    echo "date is presented"
     date_exec="date"
 elif [ -x "$(command -v gdate)" ]; then
-    echo "gdate is presented"
     date_exec="gdate"
 else
     echo "gdate (mac) or date (linux) should be presented for this script to work"
