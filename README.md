@@ -1,45 +1,42 @@
 # george
 
-пример вызова: ./george.sh -s 2016-11-01 -u 2016-12-01
+use example: ./george.sh -s 2016-11-01 -u 2016-12-01
 
-## аргументы вызова
-* p - паузы для оценки на больших коммитах. Генерится ссылка на коммит, ожидается y, n, any key
-* a - предварительный git pull --rebase для каждого проекта
-* s - дата начала, подчиняется всем правилам аргумента --since в git. Если не передан равен вчерашней дате
-* u - дата окончания, подчиняется всем правилам аргумента --since в git. Если не передан равен текущей дате
-
-
-## использование, оценка
-пример вызова: ./george.sh -p -a -s 2016-11-01 -u 2016-12-01
-регулярно запускать george.sh и пушить результаты. Приглядывать за актуальностью почт в users.list. Деления на командности пока нет
-
-"Пушить" означает: по мере оценки коммитов (Y, N), будут вноситься изменения в файлы commits_(un)trusted.list, их надо коммитить и пушить. Файлы уже созданы и под наблюдением гита. Хеши начнут пересекаться, рано или поздно, но к этому времени мы дожлны уже перевести все в вэб
-
-"users.list" - в этом файле лежит всписок всех пользователей, чью коммиты будут просматриваться. Нужно следить за тем, что бы он был актуальным. Если вы добавили новго пользователся -- это тоже надо запушить
-
-"командность" -- у нас пока нет никакого деления на команды. Всем придется видеть весь поток коммитов в релевантные репозитории. Но оценивать только себя или свою команду (если вы тимлид)
+## arguments
+* p - pause mode, for assessing commits
+* a - git pull --rebase for every project
+* s - since date, mirrors git --since arg. By default is yesterday
+* u -  since date, mirrors git --since arg. By default is today
 
 
-## использование, просмотр результатов
+## exmaples
+use exmaples:
+
+for full assesment
+./george.sh -p -a -s 2019-11-01 -u 2022-12-01
+
+vieving:
 ./george.sh -s 2016-11-01 -u 2016-12-01
 
-результатом выдачи являются записи вида:
+where results would by like:
 * ruslan--47@yandex.ru, undecided: 13293, trusted: 16823, untrusted: 18745, notUniq: 198, sum: 49059, ./together
 * oleg.fox.code@gmail.com, 1058, (sanitazed from 3424), oleg.fox.code@gmail.com, ./pablo-baikal
 * nikit.kutselaj2013@yandex.ru, 46, (sanitazed from 46), nikit.kutselaj2013@yandex.ru, ./active-age-admin
 
-где
-* ruslan--47@yandex.ru -- это разработчик. И у разработчика может быть несколько почт
-* undecided: 13293 -- счетчик коммитов, по которым не принято решений
-* trusted: 16823 -- счетчик одобренных коммитов
-* untrusted: 18745 -- счетчик отказанным коммитов
-* notUniq: 198 -- счетчик неуникальных коммитов (черри-пики, etc)
-* sum: 49059 -- суммарный счетчик, включающий все предыдущие
-* ./together -- имя репозитотрия, в котором считалось. Один разраб может коммитить в несколько репозиториев
+where
+* ruslan--47@yandex.ru -- develper name with different emails
+* undecided: 13293 -- undecided commits counter
+* trusted: 16823 -- trusted commits counter
+* untrusted: 18745 -- untrusted commits counter (decision not to trust)
+* notUniq: 198 -- commits that are not uniq, like cherry-picks, etc
+* sum: 49059 -- summory
 
 
-## установка
-* в пустую папку склонить george
-* на один уровень с george склонить все репозитории, которые вы хотите оценивать
-* запуски джорджа и утилит должны быть из george. Джордж основательно захардкожен
-* другие папки на уровне с репозиториями не допускаются, переименовывание не допускается. Джордж основательно захардкожен
+## install
+* clone george to empty folder
+* put repos on the same level
+* run george from its folder
+* its a really hardcoded project, so u shoulndt mess with folder structures or names
+
+## confing
+* the only thing u can config is user list, at the users.json
