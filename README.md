@@ -38,5 +38,6 @@ where
 * run george from its folder
 * its a really hardcoded project, so u shoulndt mess with folder structures or names
 
+
 ## confing
 * the only thing u can config is user list, at the users.json
